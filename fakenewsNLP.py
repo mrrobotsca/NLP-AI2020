@@ -172,5 +172,6 @@ plt.imshow(wc, interpolation="bilinear")
 plt.axis("off")
 # plt.title(full_names[index])
 
+plt.savefig("allwords_wc.svg")
 plt.show()
 # print(clean_fakenews_combined)
