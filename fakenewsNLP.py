@@ -113,6 +113,7 @@ data_clean.fakenews=pd.DataFrame(data_df.fakenews.apply(round1))
 
 # Let's pickle it for later use
 data_df.to_pickle("corpus.pkl")
+data_df.to_csv(r'DATAFRAME.csv')
 
 # We are going to create a document-term matrix using CountVectorizer, and exclude common English stop words
 from sklearn.feature_extraction.text import CountVectorizer
