@@ -139,7 +139,14 @@ data_clean.to_pickle('data_clean.pkl')
 pickle.dump(cv, open("cv.pkl", "wb"))
 
 from collections import Counter
-# top_dict = {}
+top_dict = {}
 # for a in data.columns:
 #     top = data[c].sort_values(ascending=False).head(30)
 #     top_dict[c]= list(zip(top.index, top.values))
+
+EDA_data=corpus_dtm.transpose()
+
+top = EDA_data[0].sort_values(ascending=False).head(50)
+top.to_csv(r'top_words.csv')
+# top_dict = top.to_dict('index')
+print(top)
