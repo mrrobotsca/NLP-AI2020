@@ -36,6 +36,7 @@ plt.title('Sentiment Analysis', fontsize=20)
 plt.xlabel('<-- Negative -------- Positive -->', fontsize=15)
 plt.ylabel('<-- Facts -------- Opinions -->', fontsize=15)
 
+plt.savefig("sentiment_analyse.svg")
 plt.show()
 
 
@@ -49,17 +50,10 @@ plt.show()
 import plotly.graph_objects as go
 
 
-# fig = go.Figure(data=go.Heatmap(
-#                    Z=[[0,6,3,0], [0,13,13,0],[0,4,10,2],[0,1,4,2],[1,2,2,0]],
-#                    X=['1', '2', '3', '4'],
-#                    Y=['1', '2', '3', '4','5'],
-#                    hoverongaps = False))
-# fig.show()
-
-
 fig = go.Figure(data=go.Heatmap(
                    z=[[0, 6, 3, 0], [0,13,13,0], [0,4,10,2],[0,1,4,2],[1,2,2,0]],
                    x=['-0.75', '-0.25', '0.25', '0.75'],
                    y=['0.1', '0.3', '0.5','0.7','0.9'],
                    hoverongaps = False))
+fig.write_image("heatmap_sa.svg")
 fig.show()
