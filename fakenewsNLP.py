@@ -139,7 +139,7 @@ data_clean.to_pickle('data_clean.pkl')
 pickle.dump(cv, open("cv.pkl", "wb"))
 
 from collections import Counter
-top_dict = {}
+
 
 EDA_data=corpus_dtm.transpose()
 
