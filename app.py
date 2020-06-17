@@ -42,11 +42,12 @@ layoutt = dict(
     # plot_bgcolor="#191A1A",
     # paper_bgcolor="#020202",
     legend=dict(font=dict(size=10), orientation='h'),
-    title='Cumulatif - Nb lancés (en haut) et confirmés (en bas)',
+    title='Nummber of fake news vs New COVID case (thousands)',
 )
 data_df = pd.read_csv('new_cases.csv')
 data_df2= pd.read_csv('DATAFRAME.csv')
 result=pd.DataFrame()
+
 
 countires=data_df.columns[data_df.columns.isin(data_df2["location"])]
 
@@ -75,6 +76,12 @@ with open(DATA_PATH.joinpath(FILENAME_PRECOMPUTED)) as precomputed_file:
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server  # for Heroku deployment
+
+ALLOWED_TYPES = (
+    "text", "number", "password", "email", "search",
+    "tel", "url", "range", "hidden",
+)
+
 
 # app.layout = html.Div(children=[NAVBAR, BODY])
 
@@ -107,6 +114,27 @@ ADDITIONAL_STOPWORDS = [
 for stopword in ADDITIONAL_STOPWORDS:
     STOPWORDS.add(stopword)
 
+
+data_clean = pd.read_pickle('data_clean.pkl')
+data = pd.read_pickle('corpus.pkl')
+
+
+# print("Want fact do you want to verify?")
+# fact= input()
+# fact=fact.lower()
+
+def isItFake(fact):
+    fakefacts= data_clean[data_clean['fakenews'].str.contains(fact)]
+
+    if fakefacts.empty is True:
+        print('No already verified fake news contains the mentioned fact!')
+        return data_clean
+    else:
+        print("The following fake news contains the mentioned fact! Be aware!")
+        print(fakefacts)
+        return fakefacts
+
+fakes=isItFake('India')
 
 
 def sample_data(dataframe, float_percent):
@@ -494,7 +522,7 @@ LDA_PLOTS = [
     ),
 ]
 WORDCLOUD_PLOTS = [
-    dbc.CardHeader(html.H5("Most frequently used words in complaints")),
+    dbc.CardHeader(html.H5("Find a fakes news related to specific ")),
     dbc.Alert(
         "Not enough data to render these plots, please adjust the filters",
         id="no-data-alert",
@@ -508,13 +536,59 @@ WORDCLOUD_PLOTS = [
                 id="tabs",
                 children=[
                     dcc.Tab(
-                        label="Treemap",
+                        label="Table",
                         children=[
+                            dbc.Col(html.P("Write a words or sentence"), md=12),
+                            
+                            dbc.Row(
+                                [
+                                    
+                                    dbc.Col(
+                                        dcc.Input(id="input1", type="text", placeholder="Type a Word or Sentence"),
+                                        md=3,
+                                    ),
+                                    dbc.Col(html.P(id="messsage1"), md=6),
+                                ]
+                            ),
+                            # dcc.Input(id="input1", type="text", placeholder="Type a Word or Sentence"),
+                            html.Div(id="output"),
+                            # dash_table.DataTable(
+                            #     id='datatable-interactivity',
+                            #     data=fakes.to_dict('records'),
+                            #     columns=[{'id': c, 'name': c} for c in fakes.columns],
+                            #     fixed_rows={'headers': True},
+                            #     style_table={'height': '600px', 'overflowY': 'auto', 'overflowX': 'auto'},
+                            #     style_cell={
+                            #         # all three widths are needed
+                            #         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                            #         'overflow': 'hidden',
+                            #         'textOverflow': 'ellipsis',
+                            #         'height': 'auto',
+                            #         'whiteSpace': 'normal',
+                            #     }
+                            # ),
                             dcc.Loading(
                                 id="loading-treemap",
-                                children=[dcc.Graph(id="bank-treemap")],
+                                children=[                            
+                                    dash_table.DataTable(
+                                        id='datatable-interactivity',
+                                        data=fakes.to_dict('records'),
+                                        columns=[{'id': c, 'name': c} for c in fakes.columns],
+                                        fixed_rows={'headers': True},
+                                        style_table={'height': '600px', 'overflowY': 'auto', 'overflowX': 'auto'},
+                                        style_cell={
+                                            # all three widths are needed
+                                            'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                                            'overflow': 'hidden',
+                                            'textOverflow': 'ellipsis',
+                                            'height': 'auto',
+                                            'whiteSpace': 'normal',
+                                        }
+                                    ),
+                                ],
                                 type="default",
-                            )
+                            ),
+                            
                         ],
                     ),
                     dcc.Tab(
@@ -528,14 +602,7 @@ WORDCLOUD_PLOTS = [
                                 ],
                                 type="default",
                             ),
-                            html.Img(src=app.get_asset_url('svg.svg'), style={
-                    'height' : '200%',
-                    'width' : '200%',
-                    'float' : 'right',
-                    'position' : 'relative',
-                    'padding-top' : 0,
-                    'padding-right' : 0
-                })
+
                         ],
                     ),
                 ],
@@ -549,46 +616,46 @@ TOP_BANKS_PLOT = [
 
 ]
 
-TOP_BIGRAM_PLOT = [
-    # dbc.CardHeader(html.H5("Top bigrams found in the database")),
-    html.Div(id='barchart'),
-    dbc.CardBody(
-        [
-            dcc.Loading(
-                id="loading-bigrams-scatter",
-                children=[
-                    dbc.Alert(
-                        "Something's gone wrong! Give us a moment, but try loading this page again if problem persists.",
-                        id="no-data-alert-bigrams",
-                        color="warning",
-                        style={"display": "none"},
-                    ),
-                    dbc.Row(
-                        [
-                            dbc.Col(html.P(["Choose a t-SNE perplexity value:"]), md=6),
-                            dbc.Col(
-                                [
-                                    dcc.Dropdown(
-                                        id="bigrams-perplex-dropdown",
-                                        options=[
-                                            {"label": str(i), "value": i}
-                                            for i in range(3, 7)
-                                        ],
-                                        value=3,
-                                    )
-                                ],
-                                md=3,
-                            ),
-                        ]
-                    ),
-                    dcc.Graph(id="bigrams-scatter"),
-                ],
-                type="default",
-            )
-        ],
-        style={"marginTop": 0, "marginBottom": 0},
-    ),
-]
+# TOP_BIGRAM_PLOT = [
+#     # dbc.CardHeader(html.H5("Top bigrams found in the database")),
+
+#     dbc.CardBody(
+#         [
+#             dcc.Loading(
+#                 id="loading-bigrams-scatter",
+#                 children=[
+#                     dbc.Alert(
+#                         "Something's gone wrong! Give us a moment, but try loading this page again if problem persists.",
+#                         id="no-data-alert-bigrams",
+#                         color="warning",
+#                         style={"display": "none"},
+#                     ),
+                    # dbc.Row(
+                    #     [
+                    #         dbc.Col(html.P(["Choose a t-SNE perplexity value:"]), md=6),
+                    #         dbc.Col(
+                    #             [
+                    #                 dcc.Dropdown(
+                    #                     id="bigrams-perplex-dropdown",
+                    #                     options=[
+                    #                         {"label": str(i), "value": i}
+                    #                         for i in range(3, 7)
+                    #                     ],
+                    #                     value=3,
+                    #                 )
+                    #             ],
+                    #             md=3,
+                    #         ),
+                    #     ]
+                    # ),
+#                     # dcc.Graph(id="bigrams-scatter"),
+#                 ],
+#                 type="default",
+#             )
+#         ],
+#         style={"marginTop": 0, "marginBottom": 0},
+#     ),
+# ]
 
 TOP_BIGRAM_COMPS = [
     dbc.CardHeader(html.H5("Comparing Amount of Fakes News Data vs New COVID cases")),
@@ -618,10 +685,12 @@ TOP_BIGRAM_COMPS = [
                                     )
                                 ],
                                 md=6,
-                            )
+                            ),
+                            
                             
                         ]
                     ),
+                    html.Div(id='barchart'),
                     # dcc.Graph(id="bigrams-comps"),
                 ],
                 type="default",
@@ -645,7 +714,14 @@ TOP_WCLOUD_PLOT = [
                         style={"display": "none"},
                     ),
 
-                    html.Img(src=app.get_asset_url('svg.svg'))
+                    html.Img(src=app.get_asset_url('newsvg.svg'), style={
+                    'height' : '100%',
+                    'width' : '100%',
+                    'float' : 'right',
+                    'position' : 'relative',
+                    'padding-top' : 0,
+                    'padding-right' : 0
+                })
                 ],
                 type="default",
             )
@@ -659,9 +735,10 @@ BODY = dbc.Container(
     [
         dbc.Row([dbc.Col(dbc.Card(TOP_WCLOUD_PLOT)),], style={"marginTop": 30}),
         dbc.Row([dbc.Col(dbc.Card(TOP_BIGRAM_COMPS)),], style={"marginTop": 30}),
-        dbc.Row([dbc.Col(dbc.Card(TOP_BIGRAM_PLOT)),], style={"marginTop": 30}),
-        dbc.Card(WORDCLOUD_PLOTS),
-        dbc.Row([dbc.Col([dbc.Card(LDA_PLOTS)])], style={"marginTop": 50}),
+        # dbc.Row([dbc.Col(dbc.Card(TOP_BIGRAM_PLOT)),], style={"marginTop": 30}),
+        dbc.Row([dbc.Col(dbc.Card(WORDCLOUD_PLOTS)),], style={"marginTop": 30}),
+        # dbc.Card(WORDCLOUD_PLOTS),
+        # dbc.Row([dbc.Col([dbc.Card(LDA_PLOTS)])], style={"marginTop": 50}),
     ],
     className="mt-12",
 )
@@ -690,32 +767,32 @@ def data(pays):
     return result
 
 # data()
-@app.callback(
-    Output("bigrams-scatter", "figure"), [Input("bigrams-perplex-dropdown", "value")],
-)
-def populate_bigram_scatter(perplexity):
-    X_embedded = TSNE(n_components=2, perplexity=perplexity).fit_transform(vects_df)
+# @app.callback(
+#     Output("bigrams-scatter", "figure"), [Input("bigrams-perplex-dropdown", "value")],
+# )
+# def populate_bigram_scatter(perplexity):
+#     X_embedded = TSNE(n_components=2, perplexity=perplexity).fit_transform(vects_df)
 
-    embed_df["tsne_1"] = X_embedded[:, 0]
-    embed_df["tsne_2"] = X_embedded[:, 1]
-    fig = px.scatter(
-        embed_df,
-        x="tsne_1",
-        y="tsne_2",
-        hover_name="bigram",
-        text="bigram",
-        size="count",
-        color="words",
-        size_max=45,
-        template="plotly_white",
-        title="Bigram similarity and frequency",
-        labels={"words": "Avg. Length<BR>(words)"},
-        color_continuous_scale=px.colors.sequential.Sunsetdark,
-    )
-    fig.update_traces(marker=dict(line=dict(width=1, color="Gray")))
-    fig.update_xaxes(visible=False)
-    fig.update_yaxes(visible=False)
-    return fig
+#     embed_df["tsne_1"] = X_embedded[:, 0]
+#     embed_df["tsne_2"] = X_embedded[:, 1]
+#     fig = px.scatter(
+#         embed_df,
+#         x="tsne_1",
+#         y="tsne_2",
+#         hover_name="bigram",
+#         text="bigram",
+#         size="count",
+#         color="words",
+#         size_max=45,
+#         template="plotly_white",
+#         title="Bigram similarity and frequency",
+#         labels={"words": "Avg. Length<BR>(words)"},
+#         color_continuous_scale=px.colors.sequential.Sunsetdark,
+#     )
+#     fig.update_traces(marker=dict(line=dict(width=1, color="Gray")))
+#     fig.update_xaxes(visible=False)
+#     fig.update_yaxes(visible=False)
+#     return fig
 
 
 
@@ -793,7 +870,26 @@ def populate_bigram_scatter(perplexity):
 
 # print(result)
 
+@app.callback(
+    Output("datatable-interactivity", "data"),
+    [Input("input1", "value")],
+)
+def update_output(input1):
+    fakes= isItFake(input1)
+    # print('heeeeyy',fakes)
+    # columns=[{'id': c, 'name': c} for c in fakes.columns]
+    return fakes.to_dict('records')
 
+
+@app.callback(
+    Output("messsage1", "children"),
+    [Input("input1", "value")],
+)
+def update_output(input1):
+    fakes= isItFake(input1)
+    # print('heeeeyy',fakes)
+    # columns=[{'id': c, 'name': c} for c in fakes.columns]
+    return 'The following fake news contains the mentioned fact! Be aware!'
 
 
 @app.callback(Output('barchart', 'children'),
@@ -891,28 +987,28 @@ def maj_graph(pays):
         })
 
 
-@app.callback(
-    [Output("lda-table", "filter_query"), Output("lda-table-block", "style")],
-    [Input("tsne-lda", "clickData")],
-    [State("lda-table", "filter_query")],
-)
-def filter_table_on_scatter_click(tsne_click, current_filter):
-    """ TODO """
-    if tsne_click is not None:
-        selected_complaint = tsne_click["points"][0]["hovertext"]
-        if current_filter != "":
-            filter_query = (
-                "({Document_No} eq "
-                + str(selected_complaint)
-                + ") || ("
-                + current_filter
-                + ")"
-            )
-        else:
-            filter_query = "{Document_No} eq " + str(selected_complaint)
-        print("current_filter", current_filter)
-        return (filter_query, {"display": "block"})
-    return ["", {"display": "none"}]
+# @app.callback(
+#     [Output("lda-table", "filter_query"), Output("lda-table-block", "style")],
+#     [Input("tsne-lda", "clickData")],
+#     [State("lda-table", "filter_query")],
+# )
+# def filter_table_on_scatter_click(tsne_click, current_filter):
+#     """ TODO """
+#     if tsne_click is not None:
+#         selected_complaint = tsne_click["points"][0]["hovertext"]
+#         if current_filter != "":
+#             filter_query = (
+#                 "({Document_No} eq "
+#                 + str(selected_complaint)
+#                 + ") || ("
+#                 + current_filter
+#                 + ")"
+#             )
+#         else:
+#             filter_query = "{Document_No} eq " + str(selected_complaint)
+#         print("current_filter", current_filter)
+#         return (filter_query, {"display": "block"})
+#     return ["", {"display": "none"}]
 
 
 # @app.callback(Output("bank-drop", "value"), [Input("bank-sample", "clickData")])
@@ -925,4 +1021,4 @@ def filter_table_on_scatter_click(tsne_click, current_filter):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

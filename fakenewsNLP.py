@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pickle
+from os import path
 
 #This fonction will only work to https://www.poynter.org/ website structure.
 def url_to_fakenews(url):
@@ -139,7 +140,41 @@ data_clean.to_pickle('data_clean.pkl')
 pickle.dump(cv, open("cv.pkl", "wb"))
 
 from collections import Counter
-# top_dict = {}
-# for a in data.columns:
-#     top = data[c].sort_values(ascending=False).head(30)
-#     top_dict[c]= list(zip(top.index, top.values))
+
+
+EDA_data=corpus_dtm.transpose()
+d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+top = EDA_data[0].sort_values(ascending=False).head(50)
+top.to_csv(r'top_words.csv')
+top_dict = top.to_dict()
+# print(top_dict)
+words=[]
+for w in top_dict:
+    words.append(w)
+print(top)
+
+from sklearn.feature_extraction import text
+stop_words = text.ENGLISH_STOP_WORDS
+
+from wordcloud import WordCloud
+
+wc = WordCloud(stopwords=stop_words, background_color="white", colormap="Dark2",
+               max_font_size=150, random_state=42)
+
+
+import matplotlib.pyplot as plt
+
+plt.rcParams['figure.figsize'] = [16, 6]
+
+# wc.generate(clean_fakenews_combined)
+wc.fit_words(top)
+image = wc.to_svg()
+svg = open(path.join(d, 'newsvg.svg'),'w').write(image)
+# plt.subplot(3, 4, index + 1)
+plt.imshow(wc, interpolation="bilinear")
+plt.axis("off")
+# plt.title(full_names[index])
+
+plt.savefig("allwords_wc.svg")
+plt.show()
+# print(clean_fakenews_combined)

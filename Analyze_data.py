@@ -12,7 +12,7 @@ data_df2= pd.read_csv('DATAFRAME.csv')
 
 countires=data_df.columns[data_df.columns.isin(data_df2["location"])].tolist()
 countires.append('date')
-data_df3=data_df[countires]
+s
 
 # data_df2[data_df['location'] == 'India'].shape[0]
 
@@ -37,7 +37,6 @@ data_df3=data_df3[['date','India']][data_df3['date'].isin(count_fakes.index.toli
 count_fakes = count_fakes.loc[:, ~count_fakes.columns.str.contains('^Unnamed')]
 count_fakes.index=count_fakes.index.rename('date')
 data_df3=data_df3.set_index('date')
-
 result = pd.concat([data_df3, count_fakes], axis=1,  join='inner')
 result['fakenews'] = result['fakenews']*-1
 print(result)

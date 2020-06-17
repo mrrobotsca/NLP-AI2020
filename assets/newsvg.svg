@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">
+<style>text{font-family:'Droid Sans Mono';font-weight:normal;font-style:normal;}</style>
+<rect width="100%" height="100%" style="fill:white"></rect>
+<text transform="translate(1,49)" font-size="65" style="fill:rgb(230, 171, 2)">government</text>
+<text transform="translate(4,116)" font-size="65" style="fill:rgb(230, 171, 2)">people</text>
+<text transform="translate(38,185)" font-size="63" style="fill:rgb(27, 158, 119)">video</text>
+<text transform="translate(226,160)" font-size="57" style="fill:rgb(27, 158, 119)">india</text>
+<text transform="translate(244,89)" font-size="55" style="fill:rgb(27, 158, 119)">cure</text>
+<text transform="translate(226,191)" font-size="35" style="fill:rgb(230, 171, 2)">facebook</text>
+<text transform="translate(64,73)" font-size="30" style="fill:rgb(102, 166, 30)">virus</text>
+<text transform="translate(158,139)" font-size="29" style="fill:rgb(230, 171, 2)">said</text>
+<text transform="translate(252,102)" font-size="21" style="fill:rgb(217, 95, 2)">message</text>
+<text transform="translate(20,132)" font-size="19" style="fill:rgb(27, 158, 119)">italian</text>
+<text transform="translate(260,122)" font-size="19" style="fill:rgb(117, 112, 179)">shows</text>
+<text transform="translate(183,65)" font-size="19" style="fill:rgb(230, 171, 2)">free</text>
+<text transform="translate(395,121) rotate(-90)" font-size="19" style="fill:rgb(27, 158, 119)">claims</text>
+<text transform="translate(20,146)" font-size="18" style="fill:rgb(102, 166, 30)">health</text>
+<text transform="translate(16,198) rotate(-90)" font-size="18" style="fill:rgb(217, 95, 2)">social</text>
+<text transform="translate(59,192)" font-size="10" style="fill:rgb(166, 118, 29)">claiming</text>
+<text transform="translate(30,196) rotate(-90)" font-size="10" style="fill:rgb(217, 95, 2)">hospital</text>
+<text transform="translate(284,8)" font-size="10" style="fill:rgb(231, 41, 138)">minister</text>
+<text transform="translate(190,72)" font-size="10" style="fill:rgb(117, 112, 179)">president</text>
+<text transform="translate(151,56)" font-size="9" style="fill:rgb(230, 171, 2)">states</text>
+<text transform="translate(146,8)" font-size="9" style="fill:rgb(102, 166, 30)">deaths</text>
+<text transform="translate(138,193)" font-size="9" style="fill:rgb(217, 95, 2)">italy</text>
+<text transform="translate(9,72)" font-size="9" style="fill:rgb(102, 102, 102)">person</text>
+<text transform="translate(168,193)" font-size="8" style="fill:rgb(217, 95, 2)">patients</text>
+<text transform="translate(180,8)" font-size="8" style="fill:rgb(217, 95, 2)">disease</text>
+<text transform="translate(29,9)" font-size="8" style="fill:rgb(231, 41, 138)">positive</text>
+<text transform="translate(182,146)" font-size="8" style="fill:rgb(102, 102, 102)">treated</text>
+<text transform="translate(111,146)" font-size="8" style="fill:rgb(231, 41, 138)">death</text>
+<text transform="translate(318,114)" font-size="8" style="fill:rgb(217, 95, 2)">million</text>
+<text transform="translate(246,168)" font-size="8" style="fill:rgb(102, 166, 30)">pandemic</text>
+<text transform="translate(348,98)" font-size="7" style="fill:rgb(231, 41, 138)">lockdown</text>
+<text transform="translate(48,74)" font-size="7" style="fill:rgb(217, 95, 2)">use</text>
+<text transform="translate(188,108) rotate(-90)" font-size="7" style="fill:rgb(231, 41, 138)">post</text>
+<text transform="translate(347,168)" font-size="7" style="fill:rgb(27, 158, 119)">prime</text>
+<text transform="translate(282,195)" font-size="7" style="fill:rgb(230, 171, 2)">man</text>
+<text transform="translate(44,59)" font-size="7" style="fill:rgb(231, 41, 138)">modi</text>
+<text transform="translate(360,120) rotate(-90)" font-size="7" style="fill:rgb(117, 112, 179)">masks</text>
+<text transform="translate(108,6)" font-size="7" style="fill:rgb(230, 171, 2)">state</text>
+<text transform="translate(237,92)" font-size="7" style="fill:rgb(166, 118, 29)">app</text>
+<text transform="translate(36,78)" font-size="7" style="fill:rgb(231, 41, 138)">new</text>
+<text transform="translate(331,55)" font-size="7" style="fill:rgb(102, 102, 102)">indian</text>
+<text transform="translate(207,197)" font-size="7" style="fill:rgb(102, 102, 102)">international</text>
+<text transform="translate(154,82)" font-size="7" style="fill:rgb(166, 118, 29)">gates</text>
+<text transform="translate(174,38)" font-size="7" style="fill:rgb(217, 95, 2)">shared</text>
+<text transform="translate(1,7)" font-size="7" style="fill:rgb(102, 166, 30)">brazil</text>
+<text transform="translate(235,8)" font-size="7" style="fill:rgb(102, 102, 102)">brazilian</text>
+<text transform="translate(246,55)" font-size="7" style="fill:rgb(217, 95, 2)">whatsapp</text>
+<text transform="translate(329,196)" font-size="6" style="fill:rgb(102, 102, 102)">picture</text>
+<text transform="translate(245,106)" font-size="6" style="fill:rgb(166, 118, 29)">cases</text>
+<text transform="translate(252,145) rotate(-90)" font-size="6" style="fill:rgb(166, 118, 29)">images</text>
+</svg>
